@@ -1,0 +1,17 @@
+pipelines:
+  default:
+    - step:
+        name: Build and package
+        script:
+          - apt-get update && apt-get install -y zip
+          - zip -r article_scrapper.zip * -x ".git"  -x "*/__pycache__/" -x "*.DS_Store" -x "__pycache__/*"
+
+          - pipe: atlassian/aws-lambda-deploy:0.2.1
+            variables:
+              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+              AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+              FUNCTION_NAME: 'Article-Scrapper'
+              ZIP_FILE: 'article_scrapper.zip'
+              COMMAND: 'update'
+              # VERSION: 'latest'

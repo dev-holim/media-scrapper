@@ -1,0 +1,16 @@
+beautifulsoup4==4.12.2
+bs4==0.0.1
+certifi==2023.11.17
+charset-normalizer==3.3.2
+greenlet==3.0.1
+idna==3.4
+lxml==4.9.3
+psycopg2-binary==2.9.9
+requests==2.31.0
+slack-sdk==3.26.1
+soupsieve==2.5
+SQLAlchemy==2.0.25
+typing_extensions==4.8.0
+urllib3==2.1.0
+python-dotenv==1.1.0
+httpx==0.28.1

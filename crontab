@@ -1,0 +1,7 @@
+PYTHONPATH=/app
+PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+TZ=Asia/Seoul
+
+# 매 시간 50분
+50 * * * * /bin/bash -c 'sleep 55; /usr/local/bin/python /app/main.py >> /var/log/main_$(date +\%Y-\%m-\%d).log 2>&1'
+
