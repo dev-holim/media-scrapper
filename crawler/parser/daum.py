@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 
 from datetime import datetime, timedelta
 
-from util import kst_now
+from core.enums import Platforms
+from util import kst_now, parse_datetime_kst, is_outdated_kst
 from crawler.parser import Parser
 
 
@@ -42,7 +43,7 @@ class DaumParser(Parser):
                 link=link,
                 publisher=publisher,
                 published_at=published_at,
-                platform='DAUM',
+                platform=Platforms.Daum,
                 image_url=None,
                 preview_content=None
             )
@@ -50,6 +51,10 @@ class DaumParser(Parser):
     def parse_li_list(self, li_list, parsed_list):
         for i in li_list:
             title_div = i.select_one('div.c-tit-doc')
+
+            if not title_div:
+                continue
+
             publisher = title_div.select_one('span.txt_info').text
 
             body_div = i.select_one('div.c-item-content')
@@ -59,7 +64,7 @@ class DaumParser(Parser):
                 item_bundle.select_one('span.txt_info').text
             )
 
-            if published_at < kst_now() - timedelta(hours=1):
+            if is_outdated_kst(published_at, 1):
                 continue
 
             image_url = body_div.select_one('img')
@@ -76,23 +81,21 @@ class DaumParser(Parser):
                 link=link,
                 publisher=publisher,
                 published_at=published_at,
-                platform='DAUM',
+                platform=Platforms.Daum,
                 image_url=image_url,
                 preview_content=preview_content
             )
 
     @staticmethod
     def _convert_daum_datetime(daum_date: str) -> datetime:
-
         if '시간전' in daum_date:
             hours_ago = int(daum_date.replace('시간전', ''))
-            published_at = kst_now() - timedelta(hours=hours_ago)
+            return kst_now() - timedelta(hours=hours_ago)
 
         elif '분전' in daum_date:
             minutes_ago = int(daum_date.replace('분전', ''))
-            published_at = kst_now() - timedelta(minutes=minutes_ago)
+            return kst_now() - timedelta(minutes=minutes_ago)
 
         else:
-            published_at = datetime.strptime(daum_date, '%Y.%m.%d')
-
-        return published_at
+            return parse_datetime_kst(datetime.strptime(daum_date, '%Y.%m.%d'))
+            # published_at = datetime.strptime(daum_date, '%Y.%m.%d')

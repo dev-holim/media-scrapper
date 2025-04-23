@@ -1,7 +1,8 @@
 from datetime import datetime, timedelta
 
-from util import kst_now, cron_log
+from util import cron_log, parse_datetime_kst, is_outdated_kst
 from crawler.parser import Parser, Data
+from core.enums import Platforms
 
 
 class NaverParser(Parser):
@@ -11,9 +12,11 @@ class NaverParser(Parser):
 
         for item in data['items']:
             title = self.replace(item['title'], ('<b>', '</b>', '&quot'), ("", "", ""))
-            published_at = datetime.strptime(item["pubDate"][:-6], "%a, %d %b %Y %H:%M:%S")
+            # published_at = datetime.strptime(item["pubDate"][:-6], "%a, %d %b %Y %H:%M:%S")
 
-            if published_at < kst_now() - timedelta(hours=60):
+            kst_published_at = parse_datetime_kst(item["pubDate"][:-6])
+
+            if is_outdated_kst(kst_published_at, 1):
                 continue
             else:
                 cron_log(f'Naver Scrap Success: {title}')
@@ -28,9 +31,9 @@ class NaverParser(Parser):
                     title=title,
                     link=item['originallink'],
                     publisher=publisher,
-                    published_at=published_at,
+                    published_at=kst_published_at,
                     image_url=None,
-                    platform='NAVER',
+                    platform=Platforms.Naver,
                     preview_content=item['description']
                 )
             )

@@ -1,10 +1,9 @@
 from datetime import datetime
 import httpx
-from json import dumps
-
+from json import dumps, JSONDecodeError
 from core.enums import Platforms
 from crawler.scrapper import Scrapper, ScrapeResponse
-
+from util import cron_log
 
 class BigKindsScrapper(Scrapper):
     subject_key = "searchKey"
@@ -57,16 +56,25 @@ class BigKindsScrapper(Scrapper):
         self.payload[self.start_date_key] = str_date
         self.payload[self.end_date_key] = str_date
 
-    async def scrape(self, subject: str, date: datetime) -> ScrapeResponse:
+    async def scrape(self, subject: str, date: datetime):
         self._set_keyword(subject)
         self._set_date(date)
 
         async with httpx.AsyncClient() as client:
-            response = await client.post(
-                url=BigKindsScrapper.url,
-                headers=BigKindsScrapper.headers,
-                json=self.payload
-            )
+            try:
+                response = await client.post(
+                    url=BigKindsScrapper.url,
+                    headers=BigKindsScrapper.headers,
+                    json=self.payload
+                )
+                response.raise_for_status()
+                # if response.status_code == 200:
+            except JSONDecodeError:
+                cron_log(f"JSON 디코딩 실패: {response.text}")
+                return None
+            except httpx.RequestError as e:
+                cron_log(f"HTTP 요청 실패: {e}")
+                return None
 
         return ScrapeResponse(
             response=response,
@@ -75,3 +83,5 @@ class BigKindsScrapper(Scrapper):
             platform=Platforms.BigKinds,
             keyword=subject
         )
+
+

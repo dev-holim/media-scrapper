@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Union, Dict, List, Optional
 from abc import ABC, abstractmethod
+from core.enums import Platforms
 
 
 @dataclass
@@ -10,7 +11,7 @@ class Data:
     publisher: str
     published_at: datetime
     link: str
-    platform: str
+    platform: Platforms
     image_url: Optional[str]
     preview_content: Optional[str]
 

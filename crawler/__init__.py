@@ -23,7 +23,10 @@ async def crawl():
     for keyword in keyword_list:
         scrape_result = await scrape(keyword)
         if scrape_result:
-            data_list.append(parse(scrape_result))
+            data_list.append({
+                "keyword": keyword.keyword,
+                "list": parse(scrape_result)
+            })
 
     return data_list
 

@@ -3,8 +3,9 @@ from typing import Union, Dict, List
 
 from bs4 import BeautifulSoup
 
+from core.enums import Platforms
 from crawler.parser import Parser, Data
-from util import kst_now
+from util import parse_datetime_kst, is_outdated_kst, cron_log
 
 
 class GoogleParser(Parser):
@@ -26,7 +27,8 @@ class GoogleParser(Parser):
                     publisher = description.find('font').text
 
                     self.append_to_list(article_list, title, link, publisher, published_at)
-            except:
+            except Exception as e:
+                cron_log(e)
                 continue
 
         return article_list
@@ -38,24 +40,28 @@ class GoogleParser(Parser):
             link: str,
             publisher: str,
             published_at: str,
-            platform: str = 'GOOGLE',
+            platform: Platforms = Platforms.Google,
             image_url: str = None,
             preview_content: str = None
     ):
         link = link.strip()
         title = title.strip()
         publisher = publisher.strip()
-        published_at = datetime.strptime(published_at.strip(), '%a, %d %b %Y %H:%M:%S GMT')
+        # published_at = datetime.strptime(published_at.strip(), '%a, %d %b %Y %H:%M:%S GMT')
 
-        if published_at + timedelta(hours=9) < kst_now() - timedelta(hours=1):
+        # 1시간 이내의 뉴스만 저장
+        kst_published_at = parse_datetime_kst(published_at.strip(), is_gmt=True)
+        if is_outdated_kst(kst_published_at, 1):
             return
+        else:
+            cron_log(f'Google Scrap Success: {title}')
 
         article_list.append(
             Data(
                 title=title,
-                link=link.strip(),
-                publisher=publisher.strip(),
-                published_at=published_at + timedelta(hours=9),
+                link=link,
+                publisher=publisher,
+                published_at=kst_published_at,
                 image_url=None,
                 preview_content=None,
                 platform=platform
