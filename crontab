@@ -2,6 +2,8 @@ PYTHONPATH=/app
 PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 TZ=Asia/Seoul
 
-# 매 시간 50분
-50 * * * * /bin/bash -c 'sleep 55; /usr/local/bin/python /app/main.py >> /var/log/main_$(date +\%Y-\%m-\%d).log 2>&1'
+# 매 시간 0분
+0 * * * * /bin/bash -c '/usr/local/bin/python /app/main.py >> /var/log/news/news_$(date +\%Y-\%m-\%d).log 2>&1'
 
+# 매일 08시 00분
+0 8 * * * /bin/bash -c '/usr/local/bin/python /app/youtube.py >> /var/log/youtube/youtube_$(date +\%Y-\%m-\%d).log 2>&1'

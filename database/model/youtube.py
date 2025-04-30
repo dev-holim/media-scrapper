@@ -13,5 +13,5 @@ class Youtube(BaseModel):
     share_path = Column(String, index=True)
     image_path = Column(String, index=True)
     youtube_at = Column(DateTime(timezone=True), onupdate=func.now())
-    is_main = Column(Boolean, default=True)
-    is_active = Column(Boolean, default=True)
+    is_main = Column(Boolean, default=False)
+    is_active = Column(Boolean, default=False)

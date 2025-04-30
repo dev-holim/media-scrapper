@@ -14,6 +14,9 @@ class DatabaseConfig:
     URL = f"postgresql+psycopg2://{_USER_NAME}:{_PASSWORD}@{_HOST}:{_PORT}/{_NAME}"
 
 
-class RequestConfig:
-    NAVER_CLIENT_ID = os.environ["NAVER_CLIENT_ID"]
-    NAVER_SECRET_KEY = os.environ["NAVER_SECRET_KEY"]
+class NaverConfig:
+    CLIENT_ID = os.environ["NAVER_CLIENT_ID"]
+    SECRET_KEY = os.environ["NAVER_SECRET_KEY"]
+
+class GoogleConfig:
+    API_KEY = os.environ["GOOGLE_API_KEY"]

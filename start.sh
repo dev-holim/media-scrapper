@@ -1,3 +1,6 @@
-crontab /etc/cron.d/crontab &&
-uvicorn main:app --host 0.0.0.0 --port ${PORT} &&
-service cron start
+#!/bin/bash
+
+crontab /etc/cron.d/crontab
+
+
+cron -f

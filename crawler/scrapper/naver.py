@@ -1,9 +1,8 @@
 from datetime import datetime
 
 import httpx
-from requests import get
 
-from config import RequestConfig
+from config import NaverConfig
 from core.enums import Platforms
 from crawler.scrapper import Scrapper, ScrapeResponse
 
@@ -14,8 +13,8 @@ class NaverScrapper(Scrapper):
     async def scrape(self, subject: str, date: datetime) -> ScrapeResponse:
         format_url = self.url.format(subject=subject)
         header = {
-            "X-Naver-Client-Id": RequestConfig.NAVER_CLIENT_ID,
-            "X-Naver-Client-Secret": RequestConfig.NAVER_SECRET_KEY
+            "X-Naver-Client-Id": NaverConfig.CLIENT_ID,
+            "X-Naver-Client-Secret": NaverConfig.SECRET_KEY
         }
 
         async with httpx.AsyncClient() as client:

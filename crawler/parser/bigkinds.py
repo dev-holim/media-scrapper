@@ -13,7 +13,7 @@ class BigKindsParser(Parser):
         for i in json.get("resultList"):
             kst_published_at = parse_datetime_kst(datetime.strptime(i['DATE'], '%Y%m%d'))
 
-            if is_outdated_kst(kst_published_at, 24):
+            if is_outdated_kst(kst_published_at, 1):
                 continue
             else:
                 cron_log(f'Google Scrap Success: {i["TITLE"]}')

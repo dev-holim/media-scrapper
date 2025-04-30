@@ -22,8 +22,7 @@ async def main_handler():
                     platform=data.platform,
                     image_url=data.image_url,
                 )
-                print(news)
-                # insert_news(news)
+                insert_news(news)
 
 
 if __name__ == "__main__":

@@ -58,11 +58,3 @@ def parse(result: ScrapeResponse):
         return parser_cls().parse(result.response.text)
     else:
         return parser_cls().parse(result.response.json())
-
-
-# def filtering(banned_publisher_set, platform_data_list: List[Data]):
-#     return [
-#         platform_data
-#         for platform_data in platform_data_list
-#         if platform_data.publisher not in banned_publisher_set
-#     ]
