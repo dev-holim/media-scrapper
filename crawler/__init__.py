@@ -1,6 +1,3 @@
-from typing import List
-from dataclasses import dataclass
-
 from core.enums import Platforms as PF
 from crawler.parser import Data
 from crawler.parser.bigkinds import BigKindsParser
@@ -14,7 +11,7 @@ from crawler.scrapper.google import GoogleScrapper
 from crawler.scrapper.naver import NaverScrapper
 from database.model.keyword import Keyword
 from database.repository.kerword import get_keywords
-from util import kst_now
+from core.util import kst_now
 
 async def crawl():
     keyword_list = get_keywords()

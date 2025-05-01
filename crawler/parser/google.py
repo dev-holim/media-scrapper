@@ -1,11 +1,10 @@
-from datetime import datetime, timedelta
 from typing import Union, Dict, List
 
 from bs4 import BeautifulSoup
 
 from core.enums import Platforms
 from crawler.parser import Parser, Data
-from util import parse_datetime_kst, is_outdated_kst, cron_log
+from core.util import parse_datetime_kst, is_outdated_kst, cron_log
 
 
 class GoogleParser(Parser):

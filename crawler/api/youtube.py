@@ -1,7 +1,7 @@
 from datetime import datetime, timezone
 from config import GoogleConfig
 from googleapiclient.discovery import build
-from util import cron_log, parse_datetime_kst, is_outdated_kst
+from core.util import cron_log, parse_datetime_kst, is_outdated_kst
 
 class YouTubeCrawler:
     def __init__(self):

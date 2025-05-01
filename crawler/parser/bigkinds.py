@@ -1,8 +1,8 @@
-from datetime import datetime, timedelta
-from typing import Union, List, Dict
+from datetime import datetime
+from typing import Union, List
 
 from crawler.parser import Parser, Data
-from util import cron_log, parse_datetime_kst, is_outdated_kst
+from core.util import cron_log, parse_datetime_kst, is_outdated_kst
 from core.enums import Platforms
 
 

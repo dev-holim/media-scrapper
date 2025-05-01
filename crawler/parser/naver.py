@@ -1,6 +1,4 @@
-from datetime import datetime, timedelta
-
-from util import cron_log, parse_datetime_kst, is_outdated_kst
+from core.util import cron_log, parse_datetime_kst, is_outdated_kst
 from crawler.parser import Parser, Data
 from core.enums import Platforms
 

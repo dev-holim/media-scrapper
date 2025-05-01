@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 
 from core.enums import Platforms
-from util import kst_now, parse_datetime_kst, is_outdated_kst
+from core.util import kst_now, parse_datetime_kst, is_outdated_kst
 from crawler.parser import Parser
 
 

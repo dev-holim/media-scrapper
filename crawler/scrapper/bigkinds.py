@@ -1,9 +1,9 @@
 from datetime import datetime
 import httpx
-from json import dumps, JSONDecodeError
+from json import JSONDecodeError
 from core.enums import Platforms
 from crawler.scrapper import Scrapper, ScrapeResponse
-from util import cron_log
+from core.util import cron_log
 
 class BigKindsScrapper(Scrapper):
     subject_key = "searchKey"
