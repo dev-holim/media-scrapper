@@ -1,17 +1,17 @@
 pipelines:
-  default:
-    - step:
-        name: Build and package
-        script:
-          - apt-get update && apt-get install -y zip
-          - zip -r article_scrapper.zip * -x ".git"  -x "*/__pycache__/" -x "*.DS_Store" -x "__pycache__/*"
-
-          - pipe: atlassian/aws-lambda-deploy:0.2.1
-            variables:
-              AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
-              AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
-              AWS_DEFAULT_REGION: ${AWS_DEFAULT_REGION}
-              FUNCTION_NAME: 'Article-Scrapper'
-              ZIP_FILE: 'article_scrapper.zip'
-              COMMAND: 'update'
-              # VERSION: 'latest'
+  branches:
+    master:
+      - step:
+          name: Build and Push Docker Image to ECR
+          caches:
+            - docker
+          script:
+            - export PORT=80
+            - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+            - pipe: atlassian/aws-ecr-push-image:2.4.2
+              variables:
+                AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+                AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+                AWS_DEFAULT_REGION: $AWS_DEFAULT_REGION
+                IMAGE_NAME: $IMAGE_NAME
+                TAGS: $IMAGE_TAG
