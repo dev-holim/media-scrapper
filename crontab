@@ -2,7 +2,7 @@ PYTHONPATH=/app
 PATH=/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 TZ=Asia/Seoul
 
-* * * * * echo "Cron running at $(date)" >> /var/log/news/start.log 2>&1
+# * * * * * echo "Cron running at $(date)" >> /var/log/news/start.log 2>&1
 
 # 매 시간 30분
 30 * * * * /bin/bash -c '/usr/local/bin/python /app/news.py >> /var/log/news/news_$(date +\%Y-\%m-\%d).log 2>&1'

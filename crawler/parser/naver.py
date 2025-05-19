@@ -1,4 +1,4 @@
-from core.util import cron_log, parse_datetime_kst, is_outdated_kst
+from core.util import cron_log, parse_datetime_kst, is_outdated_kst, get_og_image
 from crawler.parser import Parser, Data
 from core.enums import Platforms
 
@@ -24,13 +24,16 @@ class NaverParser(Parser):
             except IndexError:
                 publisher = '본문 참고'
 
+            # og:image 추출 및 S3 업로드
+            image_url = get_og_image(item['originallink'])
+
             parse_list.append(
                 Data(
                     title=title,
                     link=item['originallink'],
                     publisher=publisher,
                     published_at=kst_published_at,
-                    image_url=None,
+                    image_url=image_url,
                     platform=Platforms.Naver,
                     preview_content=item['description']
                 )

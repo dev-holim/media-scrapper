@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Union, List
 
 from crawler.parser import Parser, Data
-from core.util import cron_log, parse_datetime_kst, is_outdated_kst
+from core.util import cron_log, parse_datetime_kst, is_outdated_kst, get_og_image
 from core.enums import Platforms
 
 
@@ -18,12 +18,16 @@ class BigKindsParser(Parser):
             else:
                 cron_log(f'Google Scrap Success: {i["TITLE"]}')
 
+            image_url = i["IMAGES"] + ".jpg" if i.get('IMAGES') else None
+            if not image_url:
+                image_url = get_og_image(i["PROVIDER_LINK_PAGE"])
+
             data = Data(
                 title=i['TITLE'],
                 link=i["PROVIDER_LINK_PAGE"],
                 publisher=i['PROVIDER'],
                 published_at=kst_published_at,
-                image_url=i["IMAGES"] + ".jpg" if i.get('IMAGES') else None,
+                image_url=image_url,
                 preview_content=i["CONTENT"],
                 platform=Platforms.BigKinds
             )

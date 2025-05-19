@@ -20,3 +20,9 @@ class NaverConfig:
 
 class GoogleConfig:
     API_KEY = os.environ["GOOGLE_API_KEY"]
+
+class S3Config:
+    S3_ACCESS_KEY = os.environ["S3_ACCESS_KEY"]
+    S3_SECRET_KEY = os.environ["S3_SECRET_KEY"]
+    S3_BUCKET_NAME = os.environ["S3_BUCKET_NAME"]
+    S3_REGION = os.environ.get("S3_REGION", "ap-northeast-2")

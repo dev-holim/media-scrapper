@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 from core.enums import Platforms
 from crawler.parser import Parser, Data
-from core.util import parse_datetime_kst, is_outdated_kst, cron_log
+from core.util import parse_datetime_kst, is_outdated_kst, cron_log, get_og_image
 
 
 class GoogleParser(Parser):
@@ -25,7 +25,10 @@ class GoogleParser(Parser):
                     title = description.find('a').text
                     publisher = description.find('font').text
 
-                    self.append_to_list(article_list, title, link, publisher, published_at)
+                    # og:image 추출 및 S3 업로드
+                    image_url = get_og_image(link)
+
+                    self.append_to_list(article_list, title, link, publisher, published_at, image_url=image_url)
             except Exception as e:
                 cron_log(e)
                 continue
@@ -61,7 +64,7 @@ class GoogleParser(Parser):
                 link=link,
                 publisher=publisher,
                 published_at=kst_published_at,
-                image_url=None,
+                image_url=image_url,
                 preview_content=None,
                 platform=platform
             )

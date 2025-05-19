@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 
 from core.enums import Platforms
-from core.util import kst_now, parse_datetime_kst, is_outdated_kst
+from core.util import kst_now, parse_datetime_kst, is_outdated_kst, get_og_image
 from crawler.parser import Parser
 
 
@@ -37,6 +37,9 @@ class DaumParser(Parser):
             publisher = publisher_a_tag.text
             published_at = self._convert_daum_datetime(published_at)
 
+            # og:image 추출 및 S3 업로드
+            image_url = get_og_image(link)
+
             self.append_to_list(
                 parse_list=parsed_list,
                 title=title,
@@ -44,7 +47,7 @@ class DaumParser(Parser):
                 publisher=publisher,
                 published_at=published_at,
                 platform=Platforms.Daum,
-                image_url=None,
+                image_url=image_url,
                 preview_content=None
             )
 
@@ -70,6 +73,10 @@ class DaumParser(Parser):
             image_url = body_div.select_one('img')
             if image_url:
                 image_url = image_url["data-original-src"]
+            else:
+                # og:image 추출 및 S3 업로드
+                link = item_bundle.find('a')["href"]
+                image_url = get_og_image(link)
 
             preview_content = item_bundle.select_one('div.item-contents > p > a').text.strip()
             link = item_bundle.find('a')["href"]
